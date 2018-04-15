@@ -1,5 +1,7 @@
 ﻿{
+  "IP": "localhost",
   "port": 80,
-  "database": "mongodb://localhost:27017",
-  "secret": "changeme"
+  "dbport": 27017,
+  "dblocation": 27017,
+	"secret": "changeme"
 }
