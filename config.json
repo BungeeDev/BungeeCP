@@ -1,3 +1,5 @@
 ﻿{
-  "port": 80
+  "port": 80,
+  "database": "mongodb://localhost:27017",
+  "secret": "changeme"
 }
