@@ -2,7 +2,7 @@
     mongoose = require("mongoose"),
     passport = require("passport"),
     bodyParser = require("body-parser"),
-    User = require("./models/user"),
+    User = require("./models/mongodb"),
     LocalStrategy = require("passport-local"),
     passportLocalMongoose = require("passport-local-mongoose")
     mongodserver = require('mongod');
@@ -10,6 +10,8 @@
     path = require("path");
 
 var app = express();
+
+process.title = "BungeeCP";
 
 (function () {
     var childProcess = require("child_process");
@@ -25,13 +27,13 @@ var app = express();
 
 const mongod = new mongodserver({
     port: config.dbport,
-    bin: config.dblocation,
+    bin: config.mongodb,
     dbpath: path.join(__dirname, "/database")
 });
 
 mongod.open((err) => {
     if (err === null) {
-        mongoose.connect("mongodb://"+config.IP+":"+config.dbport);
+        mongoose.connect("mongodb://"+config.IP+":"+config.dbport+"/"+config.dbname, { useMongoClient: true });
     }
 });
 
