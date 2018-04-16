@@ -13,18 +13,6 @@ var app = express();
 
 process.title = "BungeeCP";
 
-(function () {
-    var childProcess = require("child_process");
-    var oldSpawn = childProcess.spawn;
-    function mySpawn() {
-        console.log('spawn called');
-        console.log(arguments);
-        var result = oldSpawn.apply(this, arguments);
-        return result;
-    }
-    childProcess.spawn = mySpawn;
-})();
-
 const mongod = new mongodserver({
     port: config.dbport,
     bin: config.mongodb,
@@ -47,21 +35,25 @@ app.use(require("express-session")({
 }));
 
 app.set('view engine', 'ejs');
-//
+
+app.use('/css', express.static(path.join(__dirname, "views", "css")));
+app.use('/js', express.static(path.join(__dirname, "views", "js")));
+app.use('/img', express.static(path.join(__dirname, "views", "img")));
+
 app.use(passport.initialize());
 app.use(passport.session());
-// 
+
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
 app.get("/", function (req, res) {
-    res.render("home");
+    res.render("login");
 });
 
-app.get("/secret", isLoggedIn, function (req, res) {
-    res.render("secret");
+app.get("/dashboard", authenticated, function (req, res) {
+    res.render("dashboard");
 });
 
 // Auth Routes
@@ -71,13 +63,13 @@ app.get("/register", function (req, res) {
 });
 //handling user sign up
 app.post("/register", function (req, res) {
-    User.register(new User({ username: req.body.username }), req.body.password, function (err, user) {
+    User.register(new User({ username: req.body.username, email: req.body.email }), req.body.password, function (err, user) {
         if (err) {
             console.log(err);
             return res.render('register');
         } //user stragety
         passport.authenticate("local")(req, res, function () {
-            res.redirect("/secret"); //once the user sign up
+            res.redirect("/dashboard");
         });
     });
 });
@@ -90,7 +82,7 @@ app.get("/login", function (req, res) {
 
 // middleware
 app.post("/login", passport.authenticate("local", {
-    successRedirect: "/secret",
+    successRedirect: "/dashboard",
     failureRedirect: "/login"
 }), function (req, res) {
     res.send("User is " + req.user.id);
@@ -102,7 +94,7 @@ app.get("/logout", function (req, res) {
 });
 
 
-function isLoggedIn(req, res, next) {
+function authenticated(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
