@@ -4,11 +4,12 @@
     bodyParser = require("body-parser"),
     User = require("./models/mongodb"),
     LocalStrategy = require("passport-local"),
-    passportLocalMongoose = require("passport-local-mongoose")
-    mongodserver = require('mongod');
-    config = require("./config.json")
-    path = require("path");
+    passportLocalMongoose = require("passport-local-mongoose"),
+    mongodserver = require('mongod'),
+    config = require("./config.json"),
+    path = require("path")
 
+mongoose.Promise = require('bluebird')
 var app = express();
 
 process.title = "BungeeCP";
@@ -85,7 +86,9 @@ app.post("/login", passport.authenticate("local", {
     successRedirect: "/dashboard",
     failureRedirect: "/login"
 }), function (req, res) {
+    console.log(1);
     res.send("User is " + req.user.id);
+    console.log("User is " + req.user.id);
 });
 
 app.get("/logout", function (req, res) {
@@ -96,7 +99,7 @@ app.get("/logout", function (req, res) {
 
 function authenticated(req, res, next) {
     if (req.isAuthenticated()) {
-        return next();
+       return next();
     }
     res.redirect("/login");
 }
