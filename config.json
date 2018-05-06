@@ -1,6 +1,6 @@
 ﻿{
 	"IP": "localhost",
-	"port": 80,
+	"port": 8080,
 	"dbport": 27017,
 	"dbname": "BungeeCP",
 	"mongodb": "C:\\Program Files\\MongoDB\\Server\\3.6\\bin\\mongod.exe",

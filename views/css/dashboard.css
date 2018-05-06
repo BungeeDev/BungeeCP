@@ -1,2 +1,26 @@
-﻿body {
+﻿.login {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-image: url("../img/loginbg.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.login-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px;
+    background-color: rgba(0,0,0,0.6) !important;
+    padding: 30px
+}
+.login-container input{
+    padding: 8px;
+    margin-bottom: 3px;
+    background-color: rgba(0,0,0,0.3) !important;
+}
+.login-container input:focus {
+    background-color: rgba(0,0,0,0.6) !important;
 }
